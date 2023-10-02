@@ -29,8 +29,39 @@ duplicate_free_df
 ################################################
 
 #Enable different filtering options
+## make a function that takes different argumets
 ##Organism
 ##Enzyme family 
-##Exclude CBMs
+##Exclude CBMs 
+
+#org_df = duplicate_free_df[duplicate_free_df.Strain == 'Caldicellulosiruptor saccharolyticus DSM 8903']
+#enz_df = duplicate_free_df[duplicate_free_df.Family == 'GH10']
+#no_CBM_df = duplicate_free_df[~duplicate_free_df['Family'].str.startswith('CBM')]
+
+#organism
+#sort on protein
+####a=enz_fam.sort_values('Protein')
+
+#number 
+#count the occurrance of each number, no of 1s, no of 2s etc. 
+#plot distribution in barplot
+# most common combo
+# heatmap (needs some kind of subset or too much data)
+
+
+#filtering on enz_fam
+#cant just filter
+#need to select all protein codes from the whole df that are present in selected family
+# count the occurrance of each number, no of 1s, no of 2s etc. 
+# Barplot of x most common enz_fams connected to the selected enz_fam
+
+
 
 #Visualization
+
+#heatmaps
+#class vs classes GH, PL etc. 
+#select class vs class ex. GH vs PL
+# all families vs all families in the organisms
+# One family vs everything its connected to? 
+#custom list vs custom list
