@@ -2,6 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 ######### read the cazy file ########
 df = pd.read_table('cazy_data.txt', header=None) #make into pandas df
@@ -31,15 +32,16 @@ df_D.head()
 ################################################
 
 #filter if wanted
-noCBMs_df = df_D[~df_D['Family'].str.startswith('CBM')]
-#cazymes_bacteria = cazy_organisms[cazy_organisms.Domain == 'Bacteria']
+noCBMs_df = df_D[~df_D['Family'].str.startswith('CBM')] #creates a dataframe without the entries where the family is a CBM
+df_subset_bacteria = noCBMs_df[noCBMs_df.Domain == 'Bacteria'] #creates a df with the selected domain
+df_subset_strain = noCBMs_df[noCBMs_df.Strain == 'Bacteroides thetaiotaomicron 7330'] #creates df with the selected strain
 #sort on protein
 #number entries per protein
 #
-a=noCBMs_df.sort_values('Protein')
+a=noCBMs_df.sort_values('Protein') #sorts df based on protein name
 a['entries'] = (a.groupby(
     a['Protein'].ne(a['Protein'].shift()).cumsum()
-).cumcount() + 1)
+).cumcount() + 1) #adds a column where each entry with the same protein gets a number
 
 b=a.sort_values('entries')
 
@@ -48,15 +50,28 @@ counts = b['Protein'].value_counts()
 counts_df = pd.DataFrame(counts)
 counts_df = counts_df.reset_index(level=0)
 counts_df.columns = ['Protein', 'Number of Domains']
-#counts_df.head()
-number_of_multicats = counts_df['Number of Domains'].value_counts()
-number_of_multicats_df = pd.DataFrame(number_of_multicats)
-number_of_multicats_df = number_of_multicats_df.reset_index(level=0)
-number_of_multicats_df.columns = ['Number of Domains','Count']
-number_of_multicats_df
-sns.displot(data=counts_df, x="Number of Domains",log_scale = (False, True))
+number_of_domains = counts_df['Number of Domains'].value_counts()
+number_of_domains_df = pd.DataFrame(number_of_domains)
+number_of_domains_df = number_of_domains_df.reset_index(level=0)
+number_of_domains_df.columns = ['Number of Domains','Count']
+number_of_multicats_df = number_of_domains_df[number_of_domains_df['Number of Domains']>1]
+number_of_multicats_df.head()
 
-noCBMs_df.head()
+
+#plots a barplot how many proteins there are with 1 domains, 2 domains etc.
+g = sns.barplot(x=number_of_domains_df['Number of Domains'], y=number_of_domains_df['Count'])
+g.set_yscale("log")
+g.set(xlabel="Number of Domains", ylabel="Count")
+plt.show()
+
+#excludes single domains
+f = sns.barplot(x=number_of_multicats_df['Number of Domains'], y=number_of_multicats_df['Count'])
+f.set_yscale("log")
+f.set(xlabel="Number of Domains", ylabel="Count")
+plt.show()
+
+
+
 #Enable different filtering options
 ## make a function that takes different argumets
 ##Organism
