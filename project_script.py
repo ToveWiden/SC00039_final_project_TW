@@ -15,8 +15,8 @@ df.head(10)
 #They cannot be removed simply by df.drop_duplicate() because that would also remove
 #duplicates that should be in the file. 
 #Correct duplicates are almost always consecutive. The could be non consecutive if 
-# there are several subfamilies but the same family in the same protein. Then some 
-#extra rows will be kept. This will be good enough for now
+#there are several subfamilies but the same family in the same protein. Then some 
+#extra rows will be kept. This will be good enough for now. 
 df['consecutive_protein'] = (df.groupby(
     df['Protein'].ne(df['Protein'].shift()).cumsum()
 ).cumcount() + 1) #Counts the number of consecutive proteins in the rows and
@@ -25,9 +25,38 @@ df['consecutive_protein'] = (df.groupby(
 duplicate_free_df = df.drop_duplicates() #removes the duplicates based on 
 #all columns, correct duplicates (consecutive ones) will therefore be kept
 duplicate_free_df
+df_D = duplicate_free_df[['Family','Domain','Strain','Protein']]
+df_D.head()
 
 ################################################
 
+#filter if wanted
+noCBMs_df = df_D[~df_D['Family'].str.startswith('CBM')]
+#cazymes_bacteria = cazy_organisms[cazy_organisms.Domain == 'Bacteria']
+#sort on protein
+#number entries per protein
+#
+a=noCBMs_df.sort_values('Protein')
+a['entries'] = (a.groupby(
+    a['Protein'].ne(a['Protein'].shift()).cumsum()
+).cumcount() + 1)
+
+b=a.sort_values('entries')
+
+
+counts = b['Protein'].value_counts()
+counts_df = pd.DataFrame(counts)
+counts_df = counts_df.reset_index(level=0)
+counts_df.columns = ['Protein', 'Number of Domains']
+#counts_df.head()
+number_of_multicats = counts_df['Number of Domains'].value_counts()
+number_of_multicats_df = pd.DataFrame(number_of_multicats)
+number_of_multicats_df = number_of_multicats_df.reset_index(level=0)
+number_of_multicats_df.columns = ['Number of Domains','Count']
+number_of_multicats_df
+sns.displot(data=counts_df, x="Number of Domains",log_scale = (False, True))
+
+noCBMs_df.head()
 #Enable different filtering options
 ## make a function that takes different argumets
 ##Organism
