@@ -5,7 +5,7 @@ import seaborn as sns
 import numpy as np
 
 ######### read the cazy file ########
-def read_cazy_file(filename,df):
+def read_cazy_file(filename):
     df = pd.read_table(filename, header=None) #make into pandas df
     df.columns = ['Family','Domain','Strain','Protein'] #Creates a header
     return df
@@ -20,15 +20,15 @@ def read_cazy_file(filename,df):
 #there are several subfamilies but the same family in the same protein. Then some 
 #extra rows will be kept. This will be good enough for now. 
 
-def remove_faulty_duplicates(df1,df2):
-    df1['consecutive_protein'] = (df1.groupby(df1['Protein'].ne(df1['Protein'].shift()).cumsum()).cumcount() + 1) #Counts the number of consecutive proteins in the rows and writes it in a new column
-    df1.drop_duplicates() #removes the duplicates based on all columns, correct duplicates (consecutive ones) will therefore be kept
-    df2 = df1
-    df2 = df2[['Family','Domain','Strain','Protein']]
+def remove_faulty_duplicates(df):
+    df['consecutive_protein'] = (df.groupby(df['Protein'].ne(df['Protein'].shift()).cumsum()).cumcount() + 1) #Counts the number of consecutive proteins in the rows and writes it in a new column
+    df2=df.drop_duplicates() #removes the duplicates based on all columns, correct duplicates (consecutive ones) will therefore be kept
+    df3=df2[['Family','Domain','Strain','Protein']]
+    return df3
 ################################################
 
 #filter if wanted
-def make_subset(df,df_subset, include_CBMs=True ,**Domain,**Strain):
+def make_subset(df, include_CBMs=True ,**Domain,**Strain):
     if include_CBMs == False:
         df1 = df[~df['Family'].str.startswith('CBM')] #creates a dataframe without the entries where the family is a CBM
     else:
@@ -41,6 +41,7 @@ def make_subset(df,df_subset, include_CBMs=True ,**Domain,**Strain):
         df_subset = df2[df2.Strain == Strain]
     else:
         df_subset = df2
+    return df_subset
     
     
 df_subset_bacteria = noCBMs_df[noCBMs_df.Domain == 'Bacteria'] #creates a df with the selected domain
