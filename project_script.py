@@ -28,27 +28,26 @@ def remove_faulty_duplicates(df):
 ################################################
 
 #filter if wanted
-def make_subset(df, include_CBMs=True ,**Domain,**Strain):
-    if include_CBMs == False:
+def make_subset(df, include_CBMs='Yes' , Domain = 'All',Strain = 'All'):
+    if include_CBMs == 'Yes':
+        df1=df
+    elif include_CBMs == 'No':
         df1 = df[~df['Family'].str.startswith('CBM')] #creates a dataframe without the entries where the family is a CBM
     else:
-        df1=df
-    if Domain = True:
-        df2 = df1[df1.Domain == Domain] #creates a df with the selected domain
-    else:
+        print('write "Yes" or "No"')
+        
+    if Domain == 'All':
         df2 = df1
-    if Strain = True:
-        df_subset = df2[df2.Strain == Strain]
     else:
+        df2 = df1[df1.Domain == Domain] #filters with the selected domain
+    
+    if Strain == 'All':
         df_subset = df2
+    else:
+        df_subset = df2[df2.Strain == Strain] #filters with the chosen strain
     return df_subset
     
-    
-df_subset_bacteria = noCBMs_df[noCBMs_df.Domain == 'Bacteria'] #creates a df with the selected domain
-df_subset_strain = noCBMs_df[noCBMs_df.Strain == 'Bacteroides thetaiotaomicron 7330'] #creates df with the selected strain
-#sort on protein
-#number entries per protein
-#
+
 a=df_subset_noCBMs.sort_values('Protein') #sorts df based on protein name
 a['entries'] = (a.groupby(
     a['Protein'].ne(a['Protein'].shift()).cumsum()
