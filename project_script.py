@@ -34,45 +34,32 @@ def make_subset(df, include_CBMs='Yes' , Domain = 'All',Strain = 'All'):
     elif include_CBMs == 'No':
         df1 = df[~df['Family'].str.startswith('CBM')] #creates a dataframe without the entries where the family is a CBM
     else:
-        print('write "Yes" or "No"')
-        
+        print('write "Yes" or "No"')  
     if Domain == 'All':
         df2 = df1
     else:
         df2 = df1[df1.Domain == Domain] #filters with the selected domain
-    
     if Strain == 'All':
         df_subset = df2
     else:
         df_subset = df2[df2.Strain == Strain] #filters with the chosen strain
     return df_subset
     
-
-a=df_subset_noCBMs.sort_values('Protein') #sorts df based on protein name
-a['entries'] = (a.groupby(
-    a['Protein'].ne(a['Protein'].shift()).cumsum()
-).cumcount() + 1) #adds a column where each entry with the same protein gets a number
-
-b=a.sort_values('entries')
-
-
-counts = a['Protein'].value_counts()
-counts_df = pd.DataFrame(counts)
-counts_df = counts_df.reset_index(level=0)
-counts_df.columns = ['Protein', 'Number of Domains']
-number_of_domains = counts_df['Number of Domains'].value_counts()
-number_of_domains_df = pd.DataFrame(number_of_domains)
-number_of_domains_df = number_of_domains_df.reset_index(level=0)
-number_of_domains_df.columns = ['Number of Domains','Count']
-number_of_domains_df_subset = number_of_domains_df[(number_of_domains_df['Number of Domains'] >=0) & (number_of_domains_df['Number of Domains'] <= float('inf'))]
-
-
-#plots a barplot how many proteins there are with 1 domains, 2 domains etc.
-g = sns.barplot(x=number_of_domains_df_subset['Number of Domains'], y=number_of_domains_df['Count'])
-g.set_yscale("log")
-g.set(xlabel="Number of Domains", ylabel="Count")
-plt.show()
-
+#check how many domains each protein have, taking a df, the minimum and maximum number of domains you want to include
+def count_domains(df,min_domains = 0, max_domains = float('inf')):
+    counts = df['Protein'].value_counts()
+    counts_df = pd.DataFrame(counts)
+    counts_df = counts_df.reset_index(level=0)
+    counts_df.columns = ['Protein', 'Number of Domains']
+    number_of_domains = counts_df['Number of Domains'].value_counts()
+    number_of_domains_df = pd.DataFrame(number_of_domains)
+    number_of_domains_df = number_of_domains_df.reset_index(level=0)
+    number_of_domains_df.columns = ['Number of Domains','Count']
+    number_of_domains_df_subset = number_of_domains_df[(number_of_domains_df['Number of Domains'] >= min_domains) & (number_of_domains_df['Number of Domains'] <= max_domains)]
+    g = sns.barplot(x=number_of_domains_df_subset['Number of Domains'], y=number_of_domains_df['Count'])
+    g.set_yscale("log")
+    g.set(xlabel="Number of Domains", ylabel="Count")
+    plt.draw()
 
 
 
