@@ -28,7 +28,7 @@ def remove_faulty_duplicates(df):
 ################################################
 
 #filter if wanted
-def make_subset(df, include_CBMs='Yes' , Domain = 'All',Strain = 'All'):
+def make_subset(df, include_CBMs='Yes', Domain='All', Strain='All'):
     if include_CBMs == 'Yes':
         df1=df
     elif include_CBMs == 'No':
@@ -58,9 +58,15 @@ def count_domains(df,min_domains = 0, max_domains = float('inf')):
     number_of_domains_df_subset = number_of_domains_df[(number_of_domains_df['Number of Domains'] >= min_domains) & (number_of_domains_df['Number of Domains'] <= max_domains)]
     g = sns.barplot(x=number_of_domains_df_subset['Number of Domains'], y=number_of_domains_df['Count'])
     g.set_yscale("log")
-    g.set(xlabel="Number of Domains", ylabel="Count")
+    g.set(xlabel="Number of Domains per protein", ylabel="Protein count")
     plt.draw()
+    plt.show()
 
+
+#df = read_cazy_file('SC00039_final_project_TW\cazy_data.txt')
+#df = remove_faulty_duplicates(df)
+#df_subset = make_subset(df, include_CBMs='No', Domain='Bacteria')
+#count_domains(df_subset,min_domains = 2, max_domains = 10)
 
 
 #Enable different filtering options
