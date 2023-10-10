@@ -46,6 +46,7 @@ def make_subset(df, include_CBMs='Yes', Domain='All', Strain='All'):
     return df_subset
     
 #check how many domains each protein have, taking a df, the minimum and maximum number of domains you want to include
+#plotting the number of domains against number of proteins 
 def count_domains(df,min_domains = 0, max_domains = float('inf')):
     counts = df['Protein'].value_counts()
     counts_df = pd.DataFrame(counts)
@@ -61,48 +62,3 @@ def count_domains(df,min_domains = 0, max_domains = float('inf')):
     g.set(xlabel="Number of Domains per protein", ylabel="Protein count")
     plt.draw()
     plt.show()
-
-
-#df = read_cazy_file('SC00039_final_project_TW\cazy_data.txt')
-#df = remove_faulty_duplicates(df)
-#df_subset = make_subset(df, include_CBMs='No', Domain='Bacteria')
-#count_domains(df_subset,min_domains = 2, max_domains = 10)
-
-
-#Enable different filtering options
-## make a function that takes different argumets
-##Organism
-##Enzyme family 
-##Exclude CBMs 
-
-#org_df = duplicate_free_df[duplicate_free_df.Strain == 'Caldicellulosiruptor saccharolyticus DSM 8903']
-#enz_df = duplicate_free_df[duplicate_free_df.Family == 'GH10']
-#no_CBM_df = duplicate_free_df[~duplicate_free_df['Family'].str.startswith('CBM')]
-
-#organism
-#sort on protein
-####a=enz_fam.sort_values('Protein')
-
-#number 
-#count the occurrance of each number, no of 1s, no of 2s etc. 
-#plot distribution in barplot
-# most common combo
-# heatmap (needs some kind of subset or too much data)
-
-
-#filtering on enz_fam
-#cant just filter
-#need to select all protein codes from the whole df that are present in selected family
-# count the occurrance of each number, no of 1s, no of 2s etc. 
-# Barplot of x most common enz_fams connected to the selected enz_fam
-
-
-
-#Visualization
-
-#heatmaps
-#class vs classes GH, PL etc. 
-#select class vs class ex. GH vs PL
-# all families vs all families in the organisms
-# One family vs everything its connected to? 
-#custom list vs custom list

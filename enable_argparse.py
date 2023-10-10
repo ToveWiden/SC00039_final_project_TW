@@ -1,11 +1,7 @@
 import argparse
 import project_script as ps
 
-
-
-
-
-# Main function
+#function for creating command-line arguments using argparse
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-fn", "--filename", action="store", help="filename")
