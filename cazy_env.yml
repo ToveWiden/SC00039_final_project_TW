@@ -1,0 +1,8 @@
+name: cazy_env
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - seaborn
+  - matplotlib
+  - ipykernel
