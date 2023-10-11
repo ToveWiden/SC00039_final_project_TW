@@ -8,7 +8,7 @@ In this script we want to investigate the presence of multidomain or multicataly
 
 ## Contents
 There are two sctipts in the repo, project_script.py and enable_argparse.py. 
-There is also a file with test data called test_data.txt and the envirionment file cazy_env.yml. 
+There is also a file with test data called test_data.txt and the environment file cazy_env.yml. 
 
 The script project_script.py contains a set of functions and can be imported as a module and used to analyze a data file downloaded from CAZy (or the test_data.txt).
 The script enable_argparse.py can be run from command line and imports and runs the functions from project_script.py as a complete workflow. 
